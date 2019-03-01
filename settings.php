@@ -2,7 +2,7 @@
 
 $dbHostname     = 'db';
 $dbName         = 'generatedata';
-$dbUsername     = 'root';
-$dbPassword     = '';
+$dbUsername     = 'user';
+$dbPassword     = 'password';
 $dbTablePrefix  = 'gd_';
 $encryptionSalt = 'PWw';

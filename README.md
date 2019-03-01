@@ -1,90 +1,35 @@
-# generatedata for Docker
-Docker packaging of generatedata
+# generatedata
 
-## Improvements
-
-- make extensive use of official php base image (lesser uncommon events)
-- Make the version configurable for build releases
-- Add a onbuild so End-Users can comfortably configure their ready-to-ship generatedata
+Docker compose packaging of generatedata based on [computerlyrik](https://github.com/computerlyrik/generatedata.git
+)
 
 ## Usage
 
-### Run
-
-You will need an [mysql container](https://hub.docker.com/_/mysql/) to serve a database.
-
-**Do not use these settings in production** (especially the mysql container configuration)
+### Build docker image and run
 
 ```bash
-docker run --name generatedata-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -e MYSQL_DATABASE=generatedata -d mysql:5.7 && \
-docker run --name generatedata -d --link generatedata-mysql:db -p 80:80 computerlyrik/generatedata
+docker-compose up -d
 ```
 
-Open <http://localhost/generatedata/install.php>
+### Initialize and generate data
 
-For initial configuration settings see [Example settings.php](#example-settingsphp)
+http://localhost:8080/generatedata/install.php
 
-### OnBuild
+follow the instructions.
 
-Use to pre-confiure your personal containers with a private `[settings.php](http://benkeen.github.io/generatedata/settingsFile.html)`.
+### Database admin
 
-The file will automatically included in your container build, given the follwing directory layout
+http://localhost:8082/
 
-```
-./Dockerfile
-./settings.php
-```
-
-#### Example Dockerfile
-
-```
-FROM computerlyirk/generatedata
+```properties
+Username: user
+Password: password
+Database: generatedata
 ```
 
-#### Example settings.php
+### Rebuild docker image if you make changes to settings
 
-Default data configuration for above example *plus generatedata-api enabled*
-
-```php
-<?php
-
-$dbHostname     = 'db';
-$dbName         = 'generatedata';
-$dbUsername     = 'root';
-$dbPassword     = '';
-$dbTablePrefix  = 'gd_';
-$encryptionSalt = 'furb4';
-
-$apiEnabled = true;
-
-
-?>
-```
-## Development
-
-
-### Build
-
-#### Build current version
-
-```docker build```
-
-#### Build any released version
-
-```docker build --build-arg generatedata_version=3.2.4```
-
-## Troubleshooting
-
-#### Generating of testdata fails with memory allocation error
-
-`Solution: increase the allowed PHP memory inside generatedata-machine`
-
-- Place a `php.ini`
-```
-memory_limit = 1024M
-```
-- Have the follwing statement in your `Dockerfile`
-```
-COPY php.ini /usr/local/etc/php/
+```bash
+docker-compose build
 ```
 

@@ -3,10 +3,22 @@ version: '3.6'
 services:
   db:
     image: mysql:5.7
+    restart: always
     environment:
-        - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-        - MYSQL_DATABASE=generatedata
+      # MYSQL_ALLOW_EMPTY_PASSWORD: yes
+      MYSQL_DATABASE: generatedata
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
 
+  dba:
+    image: adminer:4.7.1-standalone
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - 8082:8080
+  #
   gd:
     build:
       context: ./
@@ -15,6 +27,7 @@ services:
         - http_proxy=${http_proxy}
         - https_proxy=${https_proxy}
     image: asperitus/generatedata:latest
+    restart: always
     depends_on:
       - db
     ports:
