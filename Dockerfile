@@ -1,6 +1,6 @@
-FROM php:7.0-apache
+FROM php:7.3-apache
 
-ARG generatedata_version=3.2.4
+ARG generatedata_version=3.2.8
 
 LABEL Description="This image starts generatedata" Vendor="computerlyrik" Version="${generatedata_version}"
 
@@ -15,9 +15,9 @@ RUN chown -R www-data /var/www/html
 
 RUN a2enmod rewrite
 
-
 WORKDIR /var/www/html/generatedata
 
 RUN composer install
 
-ONBUILD COPY settings.php /var/www/html/generatedata/settings.php
+# ONBUILD COPY settings.php /var/www/html/generatedata/settings.php
+COPY settings.php /var/www/html/generatedata/settings.php
